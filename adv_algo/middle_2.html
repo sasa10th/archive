@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testcase</title>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            .banner {
+                color: white;
+                text-decoration: none;
+                align-items: center;
+                justify-content: space-between;
+                width: 720px;
+                height: 90px;
+                padding: 0 30px;
+                background: #050505;
+                display: flex;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .banner h1 {
+                font-size: 24px;
+                text-align: left;
+                margin: 0;
+                flex-shrink: 0;
+                white-space: nowrap;
+                background: linear-gradient(90deg, #aaa 0%, #fff 10%, #aaa 20%);
+                background-size: 200% auto;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: glow 3s linear infinite;
+            }
+
+            @keyframes glow {
+                0% { background-position: 100% 0; }
+                100% { background-position: -100% 0; }
+            }
+
+            .banner p {
+                color: #aaa;
+                text-align: right;
+            }
+            
+            .start {
+                top: 120px;
+                left: 8px;
+                position: absolute;
+            }
+
+            .codeblock {
+                font-family: monospace;
+                white-space: pre;
+                padding: 8px;
+                border: 1px solid black;
+            }
+        </style>
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                }
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('pre code').forEach(el => {
+                    const lines = el.textContent.split('\n');
+                    const indent = lines
+                    .filter(l => l.trim())
+                    .map(l => l.match(/^\s*/)[0].length);
+                    const minIndent = Math.min(...indent);
+                    el.textContent = lines.map(l => l.slice(minIndent)).join('\n').trim();
+                    hljs.highlightElement(el);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <a href="./middle.html" class="banner">
+            <h1>[2:중]김지환_유리 멘탈 동연이의 스트릭</h1>
+            <p>Sejong Academy of<br>Science and Arts</p>
+        </a>
+        <div class="start">
+            <table width="600">
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Testcase</h3>
+                            <p>
+                                © 
+                                <a href="mailto:44highschooler@sasa.hs.kr">
+                                    JHK2M08
+                                </a>
+                            </p>
+                            <hr>
+                            <p>
+                                <strong>바로가기 링크</strong>
+                                <blockquote style="border-left: 3px solid black; padding-left: 5px;"><a href="https://ps.sasa.hs.kr/problem.php?id=3479" style="color: black; text-decoration: none;"><strong>ps.sasa</strong></a></blockquote>
+                            </p>
+                            <h2>§2. 그 외의 경우</h2>
+                            <p>
+                                <h3></h3>
+                                &#9312; $R_i < 0$만 존재 - $M_i+R_i$ 기준 내림차순이 맞는지 검증<br>
+                                &#9313; $R_i < 0$만 존재 - $M_i+R_i$ 오름차순(일부러 틀린 정렬 유도)<br>
+                                &#9314; 혼합: $R_i >= 0$ 그룹과 $R_i < 0$ 그룹이 섞인 경우<br>
+                                &#9315; 혼합: $R_i < 0$인 문제의 $M_i$가 더 작아서 앞에 오면 안 되는 케이스<br>
+                                &#9316; 극단값: $M_i$ 최대, $R_i$ 최소<br>
+                                &#9317; $M_i$는 같고 $R_i$만 다름(타이브레이킹 검증)<br>
+                                &#9318; $R_i$가 0인 경우만 존재<br>
+                                &#9319; 랜덤 혼합(전체적인 정확성 검증)<br>
+                                <pre><code class="python">
+                                    import random
+
+                                    def save_case(filename, n, data):
+                                        with open(filename, "w") as f:
+                                            f.write(f"{n}\n")
+                                            for m, r in data:
+                                                f.write(f"{m} {r}\n")
+                                        print(f"{filename} 생성 완료")
+
+                                    N = 5000
+
+                                    # R_i < 0 만 존재 - M_i+R_i 기준 내림차순이 맞는지 검증
+                                    def gen_all_negative(n):
+                                        return [(i + 1, -1) for i in range(1, n + 1)]
+
+                                    # R_i < 0 만 존재 - M_i+R_i 오름차순(일부러 틀린 정렬 유도)
+                                    def gen_all_negative_desc(n):
+                                        return [(i + 1, -1) for i in range(n, 0, -1)]
+
+                                    # 혼합: R_i >= 0 그룹과 R_i < 0 그룹이 섞인 경우
+                                    def gen_mixed(n):
+                                        return [(i + 1, 1 if i % 2 == 0 else -1) for i in range(1, n + 1)]
+
+                                    # 혼합: R_i < 0인 문제의 M_i가 더 작아서 앞에 오면 안 되는 케이스
+                                    def gen_mixed_trap(n):
+                                        pos = [(10, 5)] * (n // 2)        # R_i > 0, M_i 작음
+                                        neg = [(1, -1)] * (n - n // 2)    # R_i < 0, M_i 더 작음 → 앞에 두면 손해
+                                        return pos + neg
+
+                                    # 극단값: M_i 최대, R_i 최소
+                                    def gen_extreme(n):
+                                        return [(10**9, -10**9)] * n
+
+                                    # M_i는 같고 R_i만 다름(타이브레이킹 검증)
+                                    def gen_same_m_diff_r(n):
+                                        return [(100, i - n // 2) for i in range(n)]
+
+                                    # R_i가 0인 경우만 존재
+                                    def gen_zero_r(n):
+                                        return [(i + 1, 0) for i in range(1, n + 1)]
+
+                                    # 랜덤 혼합(전체적인 정확성 검증)
+                                    def gen_random_full(n):
+                                        return [(random.randint(1, 10**9), random.randint(-10**9, 10**9)) for _ in range(n)]
+
+                                    if __name__ == "__main__":
+                                        save_case("2_1.in", N, gen_all_negative(N))
+                                        save_case("2_2.in", N, gen_all_negative_desc(N))
+                                        save_case("2_3.in", N, gen_mixed(N))
+                                        save_case("2_4.in", N, gen_mixed_trap(N))
+                                        save_case("2_5.in", N, gen_extreme(N))
+                                        save_case("2_6.in", N, gen_same_m_diff_r(N))
+                                        save_case("2_7.in", N, gen_zero_r(N))
+                                        save_case("2_8.in", N, gen_random_full(N))
+                                </code></pre>
+                                <pre><code class="python">
+                                    import os
+
+                                    def solve(n, problems):
+                                        # R >= 0: M_i 오름차순, R < 0: M_i + R_i 내림차순
+                                        pos = sorted([p for p in problems if p[1] >= 0], key=lambda x: x[0])
+                                        neg = sorted([p for p in problems if p[1] < 0], key=lambda x: x[0] + x[1], reverse=True)
+                                        order = pos + neg
+
+                                        min_s = 0
+                                        prefix_r = 0
+                                        for m, r in order:
+                                            # 이 문제를 풀기 전 멘탈: S + prefix_r >= m 이어야 함
+                                            min_s = max(min_s, m - prefix_r)
+                                            prefix_r += r
+                                            # 풀고 난 후 멘탈: S + prefix_r >= 0 이어야 함
+                                            min_s = max(min_s, -prefix_r)
+
+                                        return min_s
+
+                                    def process(in_file, out_file):
+                                        with open(in_file) as f:
+                                            n = int(f.readline())
+                                            problems = [tuple(map(int, f.readline().split())) for _ in range(n)]
+                                        ans = solve(n, problems)
+                                        with open(out_file, "w") as f:
+                                            f.write(f"{ans}\n")
+                                        print(f"{out_file} 생성 완료(답: {ans})")
+
+                                    if __name__ == "__main__":
+                                        for fn in sorted(os.listdir(".")):
+                                            if fn.endswith(".in"):
+                                                out_fn = fn.replace(".in", ".out")
+                                                process(fn, out_fn)
+                                </code></pre>
+                            </p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

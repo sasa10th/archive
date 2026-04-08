@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testcase</title>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            .banner {
+                color: white;
+                text-decoration: none;
+                align-items: center;
+                justify-content: space-between;
+                width: 720px;
+                height: 90px;
+                padding: 0 30px;
+                background: #050505;
+                display: flex;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .banner h1 {
+                font-size: 24px;
+                text-align: left;
+                margin: 0;
+                flex-shrink: 0;
+                white-space: nowrap;
+                background: linear-gradient(90deg, #aaa 0%, #fff 10%, #aaa 20%);
+                background-size: 200% auto;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: glow 3s linear infinite;
+            }
+
+            @keyframes glow {
+                0% { background-position: 100% 0; }
+                100% { background-position: -100% 0; }
+            }
+
+            .banner p {
+                color: #aaa;
+                text-align: right;
+            }
+            
+            .start {
+                top: 120px;
+                left: 8px;
+                position: absolute;
+            }
+
+            .codeblock {
+                font-family: monospace;
+                white-space: pre;
+                padding: 8px;
+                border: 1px solid black;
+            }
+        </style>
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                }
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('pre code').forEach(el => {
+                    const lines = el.textContent.split('\n');
+                    const indent = lines
+                    .filter(l => l.trim())
+                    .map(l => l.match(/^\s*/)[0].length);
+                    const minIndent = Math.min(...indent);
+                    el.textContent = lines.map(l => l.slice(minIndent)).join('\n').trim();
+                    hljs.highlightElement(el);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <a href="./middle.html" class="banner">
+            <h1>[2:중]김지환_유리 멘탈 동연이의 스트릭</h1>
+            <p>Sejong Academy of<br>Science and Arts</p>
+        </a>
+        <div class="start">
+            <table width="600">
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Testcase</h3>
+                            <p>
+                                © 
+                                <a href="mailto:44highschooler@sasa.hs.kr">
+                                    JHK2M08
+                                </a>
+                            </p>
+                            <hr>
+                            <p>
+                                <strong>바로가기 링크</strong>
+                                <blockquote style="border-left: 3px solid black; padding-left: 5px;"><a href="https://ps.sasa.hs.kr/problem.php?id=3479" style="color: black; text-decoration: none;"><strong>ps.sasa</strong></a></blockquote>
+                            </p>
+                            <h2>§1. 정렬 알고리즘 저격</h2>
+                            <p>
+                                <h3>퀵 소트(Quick Sort)</h3>
+                                &#9312; 오름차순 정렬된 경우<br>
+                                &#9313; 내림차순 정렬된 경우<br>
+                                &#9314; 모든 요소가 같은 경우<br>
+                                &#9315; 산모양으로 구성된 경우<br>
+                                &#9316; 배열의 중간 요소를 피벗으로 선택하는 경우<br>
+                                &#9317; Median-of-Three 저격<br>
+                                &#9318; 무작위 시드 저격<br>
+                                &#9319; 다량의 중복 요소<br>
+                                <pre><code class="python">
+                                    import sys
+
+                                    def save_case(filename, n, data):
+                                        with open(filename, "w") as f:
+                                            f.write(f"{n}\n")
+                                            for val in data:
+                                                f.write(f"{val} 1\n")
+                                        print(f"{filename} 생성 완료!")
+
+                                    # 1. 오름차순
+                                    def gen_asc(n): return list(range(1, n + 1))
+
+                                    # 2. 내림차순
+                                    def gen_desc(n): return list(range(n, 0, -1))
+
+                                    # 3. 모든 요소가 동일
+                                    def gen_same(n): return [7] * n
+
+                                    # 4. 산모양 (중간이 높음)
+                                    def gen_mountain(n): return list(range(1, n // 2 + 1)) + list(range(n // 2, 0, -1))
+
+                                    # 5. 중간 피벗 저격
+                                    def gen_anti_quicksort(n):
+                                        data = [i + 1 for i in range(n)]
+                                        for i in range(n):
+                                            mid = i + (n - 1 - i) // 2
+                                            data[i], data[mid] = data[mid], data[i]
+                                        return data
+
+                                    # 6. Median-of-Three 저격
+                                    def gen_median_killer(n):
+                                        # 일반적인 구현에서 양 끝과 중간을 비교할 때 최악을 고르도록 유도
+                                        return gen_anti_quicksort(n)
+
+                                    # 7. 무작위 시드 저격
+                                    import random
+                                    def gen_random_limit(n): return [random.randint(1, 100) for _ in range(n)]
+
+                                    # 8. 다량의 중복 요소 (1과 2 반복)
+                                    def gen_duplicate(n): return [1 if i % 2 == 0 else 2 for i in range(n)]
+
+                                    if __name__ == "__main__":
+                                        N = 200000
+                                        
+                                        save_case("1_1.in", N, gen_asc(N))
+                                        save_case("1_2.in", N, gen_desc(N))
+                                        save_case("1_3.in", N, gen_same(N))
+                                        save_case("1_4.in", N, gen_mountain(N))
+                                        save_case("1_5.in", N, gen_anti_quicksort(N))
+                                        save_case("1_6.in", N, gen_median_killer(N))
+                                        save_case("1_7.in", N, gen_random_limit(N))
+                                        save_case("1_8.in", N, gen_duplicate(N))
+                                </code></pre>
+                                <pre><code class="python">
+                                    import sys
+
+                                    def solve():
+                                        input_files = [
+                                            "1_1.in", "1_2.in", "1_3.in", "1_4.in",
+                                            "1_5.in", "1_6.in", "1_7.in", "1_8.in"
+                                        ]
+
+                                        for file_name in input_files:
+                                            try:
+                                                with open(file_name, "r") as f:
+                                                    lines = f.readlines()
+                                                    if not lines: continue
+                                                    
+                                                    n = int(lines[0].strip())
+                                                    problems = []
+                                                    for i in range(1, n + 1):
+                                                        problems.append(list(map(int, lines[i].split())))
+
+                                                plus_group = []
+                                                minus_group = []
+
+                                                for m, r in problems:
+                                                    if r >= 0:
+                                                        plus_group.append((m, r))
+                                                    else:
+                                                        minus_group.append((m, r))
+
+                                                plus_group.sort(key=lambda x: x[0])
+                                                
+                                                minus_group.sort(key=lambda x: x[0] + x[1], reverse=True)
+
+                                                sorted_problems = plus_group + minus_group
+
+                                                current_mental = 0
+                                                min_initial = 0
+                                                
+                                                for m, r in reversed(sorted_problems):
+                                                    current_mental = max(m, current_mental - r)
+                                                
+                                                min_initial = current_mental
+
+                                                output_name = file_name.replace(".in", ".out")
+                                                with open(output_name, "w") as f_out:
+                                                    f_out.write(str(min_initial) + "\n")
+                                                
+                                                print(f"{file_name} -> {output_name} 완료 (결과: {min_initial})")
+
+                                            except FileNotFoundError:
+                                                print(f"{file_name} 파일을 찾을 수 없습니다. 건너뛰었습니다.")
+
+                                    if __name__ == "__main__":
+                                        solve()
+                                </code></pre>
+                                200000, 5000, 1인 경우 생성(1인 경우는 상단 3가지 경우만 생성)
+                            </p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testcase</title>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            .banner {
+                color: white;
+                text-decoration: none;
+                align-items: center;
+                justify-content: space-between;
+                width: 720px;
+                height: 90px;
+                padding: 0 30px;
+                background: #050505;
+                display: flex;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .banner h1 {
+                font-size: 24px;
+                text-align: left;
+                margin: 0;
+                flex-shrink: 0;
+                white-space: nowrap;
+                background: linear-gradient(90deg, #aaa 0%, #fff 10%, #aaa 20%);
+                background-size: 200% auto;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: glow 3s linear infinite;
+            }
+
+            @keyframes glow {
+                0% { background-position: 100% 0; }
+                100% { background-position: -100% 0; }
+            }
+
+            .banner p {
+                color: #aaa;
+                text-align: right;
+            }
+            
+            .start {
+                top: 120px;
+                left: 8px;
+                position: absolute;
+            }
+
+            .codeblock {
+                font-family: monospace;
+                white-space: pre;
+                padding: 8px;
+                border: 1px solid black;
+            }
+        </style>
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                }
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('pre code').forEach(el => {
+                    const lines = el.textContent.split('\n');
+                    const indent = lines
+                    .filter(l => l.trim())
+                    .map(l => l.match(/^\s*/)[0].length);
+                    const minIndent = Math.min(...indent);
+                    el.textContent = lines.map(l => l.slice(minIndent)).join('\n').trim();
+                    hljs.highlightElement(el);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <a href="./middle.html" class="banner">
+            <h1>[2:중]김지환_유리 멘탈 동연이의 스트릭</h1>
+            <p>Sejong Academy of<br>Science and Arts</p>
+        </a>
+        <div class="start">
+            <table width="600">
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Testcase</h3>
+                            <p>
+                                © 
+                                <a href="mailto:44highschooler@sasa.hs.kr">
+                                    JHK2M08
+                                </a>
+                            </p>
+                            <hr>
+                            <p>
+                                <strong>바로가기 링크</strong>
+                                <blockquote style="border-left: 3px solid black; padding-left: 5px;">
+                                    <a href="./middle_1.html" style="color: black; text-decoration: none;"><strong>정렬 알고리즘 저격</strong></a>&emsp;
+                                    <a href="./middel_2.html" style="color: black; text-decoration: none;"><strong>그 외의 경우</strong></a>
+                                </blockquote>
+                            </p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
